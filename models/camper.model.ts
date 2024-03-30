@@ -5,11 +5,14 @@ const CamperSchema = new Schema({
     nombre: {
         type: String,
         required: [true, 'Missing nombre field'],
-        unique: true
     },
     edad: {
         type: Number,
         required: [true, 'Missing edad field']
+    },
+    sexo: {
+        type: String,
+        required: [true, 'Missing sexo field']
     },
     telefono: {
         type: String,
@@ -17,9 +20,6 @@ const CamperSchema = new Schema({
         unique: true
     },
     iglesia: {
-        type: String
-    },
-    grupo: {
         type: String
     },
     talla: {
@@ -55,7 +55,16 @@ const CamperSchema = new Schema({
         type: String,
         required: true
     },
+    fecha_registro: {
+        type: String,
+        required: true
+    }
     
 });
+
+CamperSchema.methods.toJSON = function() {
+    const { __v, _id, ...camper } = this.toObject();
+    return camper;
+}
 
 export default model('Camper', CamperSchema);
