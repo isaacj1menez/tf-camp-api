@@ -24,5 +24,6 @@ exports.router.post('/', [
     (0, express_validator_1.check)('telefono').custom(database_validations_1.getCamperByPhone),
     field_validator_1.default
 ], campers_controller_1.addCamper);
+exports.router.delete('/', campers_controller_1.deleteCampers);
 exports.default = exports.router;
 //# sourceMappingURL=camper.routes.js.map

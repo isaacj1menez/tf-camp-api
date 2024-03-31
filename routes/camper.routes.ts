@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { addCamper, getCamperByRegisterNumber, getCampers } from '../controllers/campers.controller';
+import { addCamper, deleteCampers, getCamperByRegisterNumber, getCampers } from '../controllers/campers.controller';
 import { check } from 'express-validator';
 import { getCamperByPhone } from '../helpers/database-validations';
 import fieldValidations from '../middlewares/field-validator';
@@ -20,6 +20,8 @@ router.post('/', [
     check('tipo_sangre', 'El campo tipo de sangre es requerido').notEmpty(),
     check('telefono').custom(getCamperByPhone),
     fieldValidations
-], addCamper)
+], addCamper);
+
+router.delete('/', deleteCampers);
 
 export default router;

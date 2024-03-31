@@ -12,8 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCampers = exports.addCamper = exports.getCamperByRegisterNumber = void 0;
+exports.deleteCampers = exports.getCampers = exports.addCamper = exports.getCamperByRegisterNumber = void 0;
 const camper_model_1 = __importDefault(require("../models/camper.model"));
+const payment_model_1 = __importDefault(require("../models/payment.model"));
 const database_validations_1 = require("../helpers/database-validations");
 const getCamperByRegisterNumber = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { register_number } = req.params;
@@ -27,7 +28,7 @@ exports.getCamperByRegisterNumber = getCamperByRegisterNumber;
 const addCamper = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const body = req.body;
     const registro = yield (0, database_validations_1.getLatestRegisterNumber)();
-    const fecha_registro = new Date().toLocaleString();
+    const fecha_registro = new Date().toString();
     const newCamper = new camper_model_1.default(Object.assign(Object.assign({}, body), { registro, fecha_registro }));
     const camper = yield newCamper.save();
     res.json({
@@ -48,4 +49,17 @@ const getCampers = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     });
 });
 exports.getCampers = getCampers;
+const deleteCampers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { ids } = req.query;
+    const ids_aux = ids;
+    const ids_arr = ids_aux.split(',');
+    ids_arr.forEach((id) => __awaiter(void 0, void 0, void 0, function* () {
+        yield camper_model_1.default.findByIdAndDelete(id);
+        yield payment_model_1.default.deleteOne({ camper: id });
+    }));
+    res.json({
+        status: 'success'
+    });
+});
+exports.deleteCampers = deleteCampers;
 //# sourceMappingURL=campers.controller.js.map

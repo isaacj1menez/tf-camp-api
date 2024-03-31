@@ -72,7 +72,7 @@ const CamperSchema = new mongoose_1.Schema({
     }
 });
 CamperSchema.methods.toJSON = function () {
-    const _a = this.toObject(), { __v, _id } = _a, camper = __rest(_a, ["__v", "_id"]);
+    const _a = this.toObject(), { __v } = _a, camper = __rest(_a, ["__v"]);
     return camper;
 };
 exports.default = (0, mongoose_1.model)('Camper', CamperSchema);
