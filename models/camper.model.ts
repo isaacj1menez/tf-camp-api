@@ -63,7 +63,7 @@ const CamperSchema = new Schema({
 });
 
 CamperSchema.methods.toJSON = function() {
-    const { __v, _id, ...camper } = this.toObject();
+    const { __v, ...camper } = this.toObject();
     return camper;
 }
 

@@ -2,6 +2,7 @@ import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import camperRoutes from '../routes/camper.routes';
+import paymentRoutes from '../routes/payment.routes';
 import { dataBaseConnection } from '../database/db.config';
 
 dotenv.config();
@@ -11,7 +12,8 @@ export class Server {
     private app: Application;
     private port: string;
     private apiPaths = {
-        campers: '/api/campers'
+        campers: '/api/campers',
+        payments: '/api/payments'
     } 
 
     constructor() {
@@ -29,6 +31,7 @@ export class Server {
 
     routes() {
         this.app.use(this.apiPaths.campers, camperRoutes)
+        this.app.use(this.apiPaths.payments, paymentRoutes)
     }
 
     connectDataBase() {
