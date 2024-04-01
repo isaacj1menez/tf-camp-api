@@ -69,6 +69,11 @@ const CamperSchema = new mongoose_1.Schema({
     fecha_registro: {
         type: String,
         required: true
+    },
+    status: {
+        type: Boolean,
+        required: true,
+        default: true
     }
 });
 CamperSchema.methods.toJSON = function () {

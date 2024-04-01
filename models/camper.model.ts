@@ -58,6 +58,11 @@ const CamperSchema = new Schema({
     fecha_registro: {
         type: String,
         required: true
+    },
+    status: {
+        type: Boolean,
+        required: true,
+        default: true
     }
     
 });
