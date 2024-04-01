@@ -14,52 +14,96 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteCampers = exports.getCampers = exports.addCamper = exports.getCamperByRegisterNumber = void 0;
 const camper_model_1 = __importDefault(require("../models/camper.model"));
-const payment_model_1 = __importDefault(require("../models/payment.model"));
 const database_validations_1 = require("../helpers/database-validations");
 const getCamperByRegisterNumber = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { register_number } = req.params;
-    const camper = yield camper_model_1.default.findOne({ registro: register_number });
-    res.json({
-        status: 'success',
-        data: camper
-    });
+    try {
+        const { register_number } = req.params;
+        const camper = yield camper_model_1.default.findOne({ registro: register_number });
+        if (!camper) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'Camper not found'
+            });
+        }
+        res.status(200).json({
+            status: 'success',
+            data: camper
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: 'Internal server error'
+        });
+    }
 });
 exports.getCamperByRegisterNumber = getCamperByRegisterNumber;
 const addCamper = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const body = req.body;
-    const registro = yield (0, database_validations_1.getLatestRegisterNumber)();
-    const fecha_registro = new Date().toString();
-    const newCamper = new camper_model_1.default(Object.assign(Object.assign({}, body), { registro, fecha_registro }));
-    const camper = yield newCamper.save();
-    res.json({
-        status: 'success',
-        data: camper
-    });
+    try {
+        const body = req.body;
+        const registro = yield (0, database_validations_1.getLatestRegisterNumber)();
+        const fecha_registro = new Date().toString();
+        const newCamper = new camper_model_1.default(Object.assign(Object.assign({}, body), { registro, fecha_registro }));
+        const camper = yield newCamper.save();
+        res.status(201).json({
+            status: 'success',
+            data: camper
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: 'Internal server error'
+        });
+    }
 });
 exports.addCamper = addCamper;
 const getCampers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const [campers, total] = yield Promise.all([
-        camper_model_1.default.find(),
-        camper_model_1.default.countDocuments()
-    ]);
-    res.json({
-        status: 'success',
-        total: total,
-        data: campers
-    });
+    try {
+        const query = { status: true };
+        const [campers, total] = yield Promise.all([
+            camper_model_1.default.find(query),
+            camper_model_1.default.countDocuments(query)
+        ]);
+        res.status(200).json({
+            status: 'success',
+            total: total,
+            data: campers
+        });
+    }
+    catch (error) {
+        console.error('Error retrieving campers:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Internal server error'
+        });
+    }
 });
 exports.getCampers = getCampers;
 const deleteCampers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { ids } = req.query;
-    const ids_aux = ids;
-    const ids_arr = ids_aux.split(',');
-    ids_arr.forEach((id) => __awaiter(void 0, void 0, void 0, function* () {
-        yield camper_model_1.default.findByIdAndDelete(id);
-        yield payment_model_1.default.deleteOne({ camper: id });
-    }));
-    res.json({
-        status: 'success'
-    });
+    try {
+        const { ids } = req.query;
+        if (!ids) {
+            return res.status(400).json({
+                success: false,
+                message: 'IDs no proporcionados'
+            });
+        }
+        const idArray = ids.split(',');
+        const updatePromises = idArray.map((id) => __awaiter(void 0, void 0, void 0, function* () {
+            yield camper_model_1.default.findByIdAndUpdate(id, { status: false });
+        }));
+        yield Promise.all(updatePromises);
+        res.json({
+            status: 'success'
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error
+        });
+    }
 });
 exports.deleteCampers = deleteCampers;
 //# sourceMappingURL=campers.controller.js.map
