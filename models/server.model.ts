@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import camperRoutes from '../routes/camper.routes';
 import paymentRoutes from '../routes/payment.routes';
+import twilioRoutes from '../routes/twilio.routes';
 import { dataBaseConnection } from '../database/db.config';
 
 dotenv.config();
@@ -13,7 +14,8 @@ export class Server {
     private port: string;
     private apiPaths = {
         campers: '/api/campers',
-        payments: '/api/payments'
+        payments: '/api/payments',
+        sms: '/api/twilio/sms'
     } 
 
     constructor() {
@@ -32,6 +34,7 @@ export class Server {
     routes() {
         this.app.use(this.apiPaths.campers, camperRoutes)
         this.app.use(this.apiPaths.payments, paymentRoutes)
+        this.app.use(this.apiPaths.sms, twilioRoutes)
     }
 
     connectDataBase() {
