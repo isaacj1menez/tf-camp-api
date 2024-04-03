@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import Camper from '../models/camper.model';
 
-import { getLatestRegisterNumber } from "../helpers/database-validations";
+import { getRegisterNumber } from "../helpers/database-validations";
 
 const getCamperByRegisterNumber = async (req: Request, res: Response) => {
     try {
@@ -30,8 +30,16 @@ const getCamperByRegisterNumber = async (req: Request, res: Response) => {
 const addCamper = async (req: Request, res: Response) => {
     try {
         const body = req.body;
+        let flag: boolean = true;
+        let registro: string = '';
 
-        const registro: number = await getLatestRegisterNumber();
+        do {
+            registro = await getRegisterNumber();
+            const camper = await Camper.findOne({registro});
+            if(!camper) flag = false;
+
+        } while (flag)
+
         const fecha_registro: string = new Date().toString();
 
         const newCamper = new Camper({ ...body, registro, fecha_registro });

@@ -7,17 +7,12 @@ const getCamperByPhone = async (phone: string) => {
     }
 }
 
-const getLatestRegisterNumber = async (): Promise<number> => {
-    const camper = await Camper.findOne().sort({ _id: -1 }).limit(1);
-    if(!camper) {
-        return 1;
-    } else {
-        const newRegisterNumber: number = Number(camper.registro);
-        return newRegisterNumber + 1;
-    }
+const getRegisterNumber = async (): Promise<string> => {
+    const randomInt = Math.floor(Math.random() * (100 - 400 + 1)) + 100;
+    return `TF${randomInt}`;
 }
 
 export {
     getCamperByPhone,
-    getLatestRegisterNumber
+    getRegisterNumber
 }

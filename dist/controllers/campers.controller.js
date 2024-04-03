@@ -41,7 +41,14 @@ exports.getCamperByRegisterNumber = getCamperByRegisterNumber;
 const addCamper = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const body = req.body;
-        const registro = yield (0, database_validations_1.getLatestRegisterNumber)();
+        let flag = true;
+        let registro = '';
+        do {
+            registro = yield (0, database_validations_1.getRegisterNumber)();
+            const camper = yield camper_model_1.default.findOne({ registro });
+            if (!camper)
+                flag = false;
+        } while (flag);
         const fecha_registro = new Date().toString();
         const newCamper = new camper_model_1.default(Object.assign(Object.assign({}, body), { registro, fecha_registro }));
         const camper = yield newCamper.save();

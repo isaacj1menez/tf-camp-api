@@ -9,13 +9,15 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
 const camper_routes_1 = __importDefault(require("../routes/camper.routes"));
 const payment_routes_1 = __importDefault(require("../routes/payment.routes"));
+const twilio_routes_1 = __importDefault(require("../routes/twilio.routes"));
 const db_config_1 = require("../database/db.config");
 dotenv_1.default.config();
 class Server {
     constructor() {
         this.apiPaths = {
             campers: '/api/campers',
-            payments: '/api/payments'
+            payments: '/api/payments',
+            sms: '/api/twilio/sms'
         };
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '3000';
@@ -30,6 +32,7 @@ class Server {
     routes() {
         this.app.use(this.apiPaths.campers, camper_routes_1.default);
         this.app.use(this.apiPaths.payments, payment_routes_1.default);
+        this.app.use(this.apiPaths.sms, twilio_routes_1.default);
     }
     connectDataBase() {
         (0, db_config_1.dataBaseConnection)();
