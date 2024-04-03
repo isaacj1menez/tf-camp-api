@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Camper from '../models/camper.model';
-import Payment from '../models/payment.model';
+
 import { getLatestRegisterNumber } from "../helpers/database-validations";
 
 const getCamperByRegisterNumber = async (req: Request, res: Response) => {
