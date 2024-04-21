@@ -22,8 +22,8 @@ const getCamperByPhone = (phone) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.getCamperByPhone = getCamperByPhone;
 const getRegisterNumber = () => __awaiter(void 0, void 0, void 0, function* () {
-    const randomInt = Math.floor(Math.random() * (100 - 400 + 1)) + 100;
-    return `TF${randomInt}`;
+    const randomInt = Math.floor(Math.random() * (400 - 100 + 1)) + 100;
+    return `TF-${randomInt}`;
 });
 exports.getRegisterNumber = getRegisterNumber;
 //# sourceMappingURL=database-validations.js.map

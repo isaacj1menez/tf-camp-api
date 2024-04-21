@@ -8,8 +8,8 @@ const getCamperByPhone = async (phone: string) => {
 }
 
 const getRegisterNumber = async (): Promise<string> => {
-    const randomInt = Math.floor(Math.random() * (100 - 400 + 1)) + 100;
-    return `TF${randomInt}`;
+    const randomInt = Math.floor(Math.random() * (400 - 100 + 1)) + 100;
+    return `TF-${randomInt}`;
 }
 
 export {
