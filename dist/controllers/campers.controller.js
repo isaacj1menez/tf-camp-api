@@ -18,7 +18,11 @@ const database_validations_1 = require("../helpers/database-validations");
 const getCamperByRegisterNumber = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { register_number } = req.params;
-        const camper = yield camper_model_1.default.findOne({ registro: register_number });
+        let camper;
+        camper = yield camper_model_1.default.findOne({ registro: register_number });
+        if (!camper) {
+            camper = yield camper_model_1.default.findById(register_number);
+        }
         if (!camper) {
             return res.status(404).json({
                 status: 'error',
