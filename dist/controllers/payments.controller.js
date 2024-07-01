@@ -16,7 +16,13 @@ exports.getPaymentsByCamper = exports.addPayment = exports.getPaymentByTransacti
 const payment_model_1 = __importDefault(require("../models/payment.model"));
 const getPaymentByTransactionNumber = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { transaction_number } = req.query;
-    const payment = yield payment_model_1.default.findById(transaction_number);
+    let payment;
+    if (transaction_number) {
+        payment = yield payment_model_1.default.findById(transaction_number).populate('camper', 'nombre');
+    }
+    else {
+        payment = yield payment_model_1.default.find().populate('camper', 'nombre');
+    }
     res.json({
         status: 'success',
         data: payment
