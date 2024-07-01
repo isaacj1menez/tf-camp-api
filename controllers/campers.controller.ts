@@ -6,7 +6,13 @@ import { getRegisterNumber } from "../helpers/database-validations";
 const getCamperByRegisterNumber = async (req: Request, res: Response) => {
     try {
         const { register_number } = req.params;
-        const camper = await Camper.findOne({ registro: register_number });
+        let camper;
+
+        camper = await Camper.findOne({ registro: register_number });
+
+        if (!camper) {
+            camper = await Camper.findById(register_number);
+        }
 
         if (!camper) {
             return res.status(404).json({
