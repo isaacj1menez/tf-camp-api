@@ -3,7 +3,13 @@ import Payment from '../models/payment.model';
 
 const getPaymentByTransactionNumber = async (req: Request, res: Response) => {
     const { transaction_number } = req.query;
-    const payment = await Payment.findById(transaction_number);
+    let payment;
+    if(transaction_number) {
+        payment = await Payment.findById(transaction_number).populate('camper', 'nombre');
+    } else {
+        payment = await Payment.find().populate('camper', 'nombre');
+    }
+
     res.json({
         status: 'success',
         data: payment
